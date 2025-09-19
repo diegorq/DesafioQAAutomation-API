@@ -1,7 +1,10 @@
 package callers;
 
 
-import DTO.*;
+import DTO.AccountDTO;
+import DTO.RentRequestDTO;
+import DTO.TokenDTO;
+import DTO.UserDTO;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import requestspecification.BibliotecaRequestSpecification;
@@ -12,7 +15,7 @@ import static io.restassured.RestAssured.given;
 
 public class ApiCaller {
 
-    private RequestSpecification requestSpec;
+    private final RequestSpecification requestSpec;
 
 
     public ApiCaller() {
@@ -34,9 +37,20 @@ public class ApiCaller {
                 .jsonPath().getObject("", UserDTO.class);
     }
 
+    public UserDTO exibirDadosUsuario(String token, String id) {
+        //demoqa.com/Account/v1/User
+        return given().header("Authorization", token)
+                .spec(requestSpec)
+                .when().log().all()
+                .get("/Account/v1/User/" + id)
+                .then().log().all()
+                .extract()
+                .body().jsonPath().getObject("", UserDTO.class);
+    }
+
     public TokenDTO gerarToken(AccountDTO account, int expectedStatusCode) {
 
-        return given().auth().basic(account.getUserName(),account.getPassword())
+        return given().auth().basic(account.getUserName(), account.getPassword())
                 .spec(requestSpec)
                 .when()
                 .body(account)
@@ -74,7 +88,8 @@ public class ApiCaller {
     }
 
     public JsonPath alugarLivros(TokenDTO token, RentRequestDTO rentRequest) {
-        return given() .header("Authorization", "Bearer " +token.getToken())
+
+        return given().header("Authorization", "Bearer " + token.getToken())
                 .spec(requestSpec)
                 .when().log().all()
                 .body(rentRequest)

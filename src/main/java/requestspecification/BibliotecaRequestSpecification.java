@@ -7,7 +7,6 @@ import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
 import io.restassured.specification.RequestSpecification;
 
-
 import static io.restassured.http.ContentType.JSON;
 
 public class BibliotecaRequestSpecification {
@@ -28,5 +27,7 @@ public class BibliotecaRequestSpecification {
                 .setBaseUri(BASEURI)
                 .build();
     }
+
+
 }
 

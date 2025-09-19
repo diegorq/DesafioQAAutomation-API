@@ -1,7 +1,6 @@
 package core;
 
 
-
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
@@ -17,20 +16,20 @@ public class Utils {
         return n > l1.size() ? l1.subList(0, l1.size()) : l1.subList(0, n);
     }
 
-    public String gerarNomeUsuario(){
-       return RandomStringUtils.randomAlphanumeric(10);
+    public String gerarNomeUsuario() {
+        return RandomStringUtils.randomAlphanumeric(10);
     }
 
-    public String gerarSenha(){
+    public String gerarSenha() {
         String set1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String set2 = "abcdefghijklmnopqrstuvwxyz";
-        String set3= "0123456789";
+        String set3 = "0123456789";
         String set4 = "!@#$%&*";
-        return RandomStringUtils.randomAlphanumeric(6)+
-                RandomStringUtils.random( 1, set1 )+
-                RandomStringUtils.random( 1, set2 )+
-                RandomStringUtils.random( 1, set3 )+
-                RandomStringUtils.random( 1, set4 );
+        return RandomStringUtils.randomAlphanumeric(6) +
+                RandomStringUtils.random(1, set1) +
+                RandomStringUtils.random(1, set2) +
+                RandomStringUtils.random(1, set3) +
+                RandomStringUtils.random(1, set4);
     }
 
 
