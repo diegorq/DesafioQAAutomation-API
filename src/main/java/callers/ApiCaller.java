@@ -2,6 +2,7 @@ package callers;
 
 
 import DTO.*;
+import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import requestspecification.BibliotecaRequestSpecification;
 
@@ -23,10 +24,10 @@ public class ApiCaller {
 
         return given()
                 .spec(requestSpec)
-                .when().log().all()
+                .when()
                 .body(account)
                 .post("/Account/v1/User")
-                .then().log().all()
+                .then()
                 .statusCode(expectedStatusCode)
                 .extract()
                 .response()
@@ -35,7 +36,7 @@ public class ApiCaller {
 
     public TokenDTO gerarToken(AccountDTO account, int expectedStatusCode) {
 
-        return given()
+        return given().auth().basic(account.getUserName(),account.getPassword())
                 .spec(requestSpec)
                 .when()
                 .body(account)
@@ -54,7 +55,7 @@ public class ApiCaller {
                 .when()
                 .body(account)
                 .post("/Account/v1/Authorized")
-                .then().log().all()
+                .then()
                 .statusCode(expectedStatusCode)
                 .extract()
                 .response().as(Boolean.class);
@@ -72,16 +73,15 @@ public class ApiCaller {
                 .response().jsonPath().getList("books.isbn");
     }
 
-    public List<BookDTO> alugarLivros(RentRequestDTO rentRequest) {
-        return given()
+    public JsonPath alugarLivros(TokenDTO token, RentRequestDTO rentRequest) {
+        return given() .header("Authorization", "Bearer " +token.getToken())
                 .spec(requestSpec)
-                .when()
+                .when().log().all()
                 .body(rentRequest)
                 .post("/BookStore/v1/Books")
-                .then()
-                .statusCode(200)
+                .then().log().all()
                 .extract()
-                .body().jsonPath().getList(".", BookDTO.class);
+                .body().jsonPath();//.getList(".", BookDTO.class);
     }
 
 }

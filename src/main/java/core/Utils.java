@@ -22,7 +22,15 @@ public class Utils {
     }
 
     public String gerarSenha(){
-        return RandomStringUtils.randomAlphanumeric(10)+"@";
+        String set1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String set2 = "abcdefghijklmnopqrstuvwxyz";
+        String set3= "0123456789";
+        String set4 = "!@#$%&*";
+        return RandomStringUtils.randomAlphanumeric(6)+
+                RandomStringUtils.random( 1, set1 )+
+                RandomStringUtils.random( 1, set2 )+
+                RandomStringUtils.random( 1, set3 )+
+                RandomStringUtils.random( 1, set4 );
     }
 
 

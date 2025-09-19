@@ -62,7 +62,7 @@ public class AccountSteps {
 
 
         rentRequest.setCollectionOfIsbns(strings);
-        api.alugarLivros(rentRequest);
+        api.alugarLivros(token,rentRequest);
     }
     @Então("os livros alugados são listados nos dados do meu usuário")
     public void os_livros_alugados_são_listados_nos_dados_do_meu_usuário() {
