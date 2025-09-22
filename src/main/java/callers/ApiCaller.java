@@ -5,7 +5,9 @@ import DTO.AccountDTO;
 import DTO.RentRequestDTO;
 import DTO.TokenDTO;
 import DTO.UserDTO;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import requestspecification.BibliotecaRequestSpecification;
 
@@ -23,7 +25,7 @@ public class ApiCaller {
     }
 
 
-    public UserDTO criarUsuario(AccountDTO account, int expectedStatusCode) {
+    public Response criarUsuario(AccountDTO account) {
 
         return given()
                 .spec(requestSpec)
@@ -31,72 +33,67 @@ public class ApiCaller {
                 .body(account)
                 .post("/Account/v1/User")
                 .then()
-                .statusCode(expectedStatusCode)
                 .extract()
-                .response()
-                .jsonPath().getObject("", UserDTO.class);
+                .response();
     }
 
-    public UserDTO exibirDadosUsuario(String token, String id) {
-        //demoqa.com/Account/v1/User
+    public Response exibirDadosUsuario(String token, String id) {
         return given().header("Authorization", token)
                 .spec(requestSpec)
-                .when().log().all()
-                .get("/Account/v1/User/" + id)
-                .then().log().all()
-                .extract()
-                .body().jsonPath().getObject("", UserDTO.class);
+                .when()
+                .pathParam("ID",id)
+                .get("/Account/v1/User//{ID}")
+                .then()
+                .extract().response();
+
     }
 
-    public TokenDTO gerarToken(AccountDTO account, int expectedStatusCode) {
+    public Response gerarToken(AccountDTO account) {
 
         return given().auth().basic(account.getUserName(), account.getPassword())
                 .spec(requestSpec)
                 .when()
                 .body(account)
-                .post("/Account/v1/GenerateToken")
+                .post("/Account/v1/GenerateToken").prettyPeek()
                 .then()
-                .statusCode(expectedStatusCode)
                 .extract()
-                .response()
-                .jsonPath().getObject("", TokenDTO.class);
-    }
+                .response();
+                 }
 
 
-    public Boolean validarAutorizacao(AccountDTO account, int expectedStatusCode) {
+    public Boolean validarAutorizacao(AccountDTO account) {
         return given()
                 .spec(requestSpec)
                 .when()
                 .body(account)
                 .post("/Account/v1/Authorized")
                 .then()
-                .statusCode(expectedStatusCode)
                 .extract()
                 .response().as(Boolean.class);
     }
 
 
-    public List<String> listarLivros() {
+    public Response listarLivros() {
         return given()
                 .spec(requestSpec)
                 .when()
                 .get("/BookStore/v1/Books")
                 .then()
-                .statusCode(200)
                 .extract()
-                .response().jsonPath().getList("books.isbn");
+                .response();
     }
 
-    public JsonPath alugarLivros(TokenDTO token, RentRequestDTO rentRequest) {
+    public Response alugarLivros(TokenDTO token,RentRequestDTO rentRequest) {
 
-        return given().header("Authorization", "Bearer " + token.getToken())
+        return given()
+                .header("Authorization", token.getToken())
                 .spec(requestSpec)
-                .when().log().all()
+                .when()
                 .body(rentRequest)
-                .post("/BookStore/v1/Books")
-                .then().log().all()
-                .extract()
-                .body().jsonPath();//.getList(".", BookDTO.class);
+                .post("/BookStore/v1/Books")  .prettyPeek()
+                .then()
+                .extract().response();
+
     }
 
 }

@@ -28,6 +28,20 @@ public class BibliotecaRequestSpecification {
                 .build();
     }
 
+    public RequestSpecification getRequestSpecificationAuth() {
+        return new RequestSpecBuilder()
+                .setConfig(
+                        new RestAssuredConfig()
+                                .sslConfig(
+                                        new SSLConfig().relaxedHTTPSValidation()
+                                )
+                                .logConfig(LogConfig.logConfig().enableLoggingOfRequestAndResponseIfValidationFails()
+                                )
+                )
+                .setContentType(JSON)
+                .setBaseUri(BASEURI)
+                .build();
+    }
 
 }
 

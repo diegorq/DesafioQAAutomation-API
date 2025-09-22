@@ -3,6 +3,7 @@ Funcionalidade: Biblioteca DemoQA
 
   @api
   Cenário: Aluguel de Livros com Novo Usuário
+
     Dado que eu cadastre um novo usuário
     E gere um token de acesso
     E esteja autorizado
