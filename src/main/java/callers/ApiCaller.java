@@ -4,14 +4,9 @@ package callers;
 import DTO.AccountDTO;
 import DTO.RentRequestDTO;
 import DTO.TokenDTO;
-import DTO.UserDTO;
-import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import requestspecification.BibliotecaRequestSpecification;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
